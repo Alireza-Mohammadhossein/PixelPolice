@@ -9,3 +9,10 @@ export interface PixelPoliceMeasurement {
   end: Point;
   distance: number;
 }
+
+
+export interface MeasurementsCanvasProps {
+  measurements: PixelPoliceMeasurement[];
+  startPoint: Point | null;
+  mousePosition: Point;
+}

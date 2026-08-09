@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import './PixelPolice.css';
 import { Point, PixelPoliceMeasurement } from './types';
+import MeasurementsCanvas from "./components/MeasurementCanvas";
 
 
 
@@ -85,6 +86,12 @@ export default function PixelPolice() {
           className="pixel-police-overlay"
           onClick={handleMouseClick}
         >
+          <MeasurementsCanvas
+            measurements={measurements}
+            startPoint={startPoint}
+            mousePosition={mousePosition}
+          />
+
           <div className="pixel-police-panel">
             <h1>Pixel Police Activated</h1>
             <p>Mouse Position: <br />
