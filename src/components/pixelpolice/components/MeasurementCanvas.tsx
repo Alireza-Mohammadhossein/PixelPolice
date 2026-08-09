@@ -35,21 +35,93 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
       ctx.setLineDash([6, 6]);
 
       
-      // Draw completed measurements
+      // draw completed measurements
       measurements.forEach((measurement) => {
         ctx.beginPath();
         ctx.moveTo(measurement.start.x, measurement.start.y);
         ctx.lineTo(measurement.end.x, measurement.end.y);
         ctx.stroke();
+
+
+        // add circle at start point
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#ff3b30";
+        ctx.beginPath();
+        ctx.arc(
+          measurement.start.x,
+          measurement.start.y,
+          5,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+
+
+        // add circle at end point
+        ctx.fillStyle = "#0a84ff";
+        ctx.beginPath();
+        ctx.arc(
+          measurement.end.x,
+          measurement.end.y,
+          5,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+
+        ctx.setLineDash([6, 6]);
       });
 
 
-      // Draw preview line
+      // draw preview line
       if (startPoint) {
         ctx.beginPath();
         ctx.moveTo(startPoint.x, startPoint.y);
         ctx.lineTo(mousePosition.x, mousePosition.y);
         ctx.stroke();
+
+        // add circle at start point
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#ff3b30";
+        ctx.beginPath();
+        ctx.arc(
+          startPoint.x,
+          startPoint.y,
+          5,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+
+
+        // add circle at mouse position
+        ctx.fillStyle = "#0a84ff";
+        ctx.beginPath();
+        ctx.arc(
+          mousePosition.x,
+          mousePosition.y,
+          5,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
+
+        ctx.setLineDash([6, 6]);
+      }
+
+      // add circle at mouse position
+      if (!startPoint) {
+        ctx.setLineDash([]);
+        ctx.fillStyle = "#ffe5b4";
+        ctx.beginPath();
+        ctx.arc(
+          mousePosition.x,
+          mousePosition.y,  
+        5,
+          0,
+          2 * Math.PI
+        );
+        ctx.fill();
       }
 
       animationFrameId = requestAnimationFrame(draw);
@@ -58,6 +130,7 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
 
 
     draw();
+
 
     return () => {
       cancelAnimationFrame(animationFrameId);
