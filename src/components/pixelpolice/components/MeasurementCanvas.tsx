@@ -70,6 +70,40 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
         ctx.fill();
 
         ctx.setLineDash([6, 6]);
+
+
+        // calculate the middle of the line
+        const middleX = (measurement.start.x + measurement.end.x) / 2;
+        const middleY = (measurement.start.y + measurement.end.y) / 2;
+
+
+        // draw label background
+        ctx.fillStyle = "#ffffff";
+
+        ctx.beginPath();
+        ctx.roundRect(
+          middleX - 20,
+          middleY - 16,
+          40,
+          22,
+          6
+        );
+        ctx.fill();
+
+
+        // draw label text
+        ctx.fillStyle = "#222";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.fillText(
+          `${measurement.distance}px`,
+          middleX,
+          middleY - 5
+        );
+
+
       });
 
 
@@ -107,6 +141,44 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
         ctx.fill();
 
         ctx.setLineDash([6, 6]);
+
+
+        // calculate the middle of the preview line
+        const previewDistance = Math.round(
+          Math.hypot(
+            mousePosition.x - startPoint.x,
+            mousePosition.y - startPoint.y
+          )
+        );
+
+        const middleX = (startPoint.x + mousePosition.x) / 2;
+        const middleY = (startPoint.y + mousePosition.y) / 2;
+
+
+        // draw label background
+        ctx.fillStyle = "#ffffff";
+        ctx.beginPath();
+        ctx.roundRect(
+          middleX - 20,
+          middleY - 16,
+          40,
+          22,
+          6
+        );
+        ctx.fill();
+
+
+        // draw label text
+        ctx.fillStyle = "#222";
+        ctx.font = "12px Arial";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+
+        ctx.fillText(
+          `${previewDistance}px`,
+          middleX,
+          middleY - 5
+        );
       }
 
       // add circle at mouse position
@@ -124,8 +196,8 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
         ctx.fill();
       }
 
-      animationFrameId = requestAnimationFrame(draw);
 
+      animationFrameId = requestAnimationFrame(draw);
     }
 
 

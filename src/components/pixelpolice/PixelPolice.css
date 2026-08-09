@@ -7,7 +7,7 @@
   height: 48px;
 
   border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 10px;
+  border-radius: 5px;
 
   background: #ffffff;
   color: #111;
@@ -60,7 +60,7 @@
   background: #ffffff;
   color: #666;
 
-  border-radius: 10px;
+  border-radius: 5px;
 
   padding: 16px;
 
@@ -79,4 +79,16 @@
   pointer-events: none;
 
   z-index: 9999;
+}
+
+
+.measurement-item {
+  display: flex;
+  justify-content: space-between;
+
+  padding: 8px 0;
+
+  border-bottom: 1px solid #eee;
+
+  font-size: 14px;
 }

@@ -94,14 +94,31 @@ export default function PixelPolice() {
           />
 
           <div className="pixel-police-panel">
-            <h1>Pixel Police Activated</h1>
-            <p>Mouse Position: <br />
+            <h4>Measurements</h4>
+            {/* <p>Mouse Position: <br />
               X: {Math.round(mousePosition.x)} <br />
               Y: {Math.round(mousePosition.y)}
             </p>
             <p>
               Measurements: {measurements.length}
-            </p>
+            </p> */}
+
+            {measurements.length === 0 && (
+              <p>No measurements yet.</p>
+            )}
+
+            {measurements.map((measurement, index) => (
+              <div
+                key={measurement.id}
+                className="measurement-item"
+              >
+                <span>#{index + 1}</span>
+
+                <span>{measurement.distance}px</span>
+              </div>
+            ))}
+
+
             {startPoint && (
               <p>
                 Selecting second point...
