@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import './PixelPolice.css';
 import { Point, PixelPoliceMeasurement } from './types';
 import MeasurementsCanvas from "./components/MeasurementCanvas";
+import { getNearbyCorners } from "./snapping";
 
 
 
@@ -14,6 +15,8 @@ export default function PixelPolice() {
   });
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [measurements, setMeasurements] = useState<PixelPoliceMeasurement[]>([]);
+
+  const [nearbyCorners, setNearbyCorners] = useState([]);
 
 
   // reset measurements
