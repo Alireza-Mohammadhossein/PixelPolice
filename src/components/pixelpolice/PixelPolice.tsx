@@ -10,13 +10,22 @@ export default function PixelPolice() {
   }
 
   return (
-    <button
-      className={`pixel-police-button ${isPixelPoliceEnabled ? "enabled" : ""}`}
-      onClick={togglePixelPolice}
-    >
-      {isPixelPoliceEnabled ? "🚨 Pixel Police 🚨" : "🚨"}
-    </button>
+    <>
+      <button
+        className={`pixel-police-button ${isPixelPoliceEnabled ? "enabled" : ""}`}
+        onClick={togglePixelPolice}
+        >
+        {isPixelPoliceEnabled ? "🚨 Pixel Police 🚨" : "🚨"}
+      </button>
 
+      {isPixelPoliceEnabled && (
+        <div className="pixel-police-overlay">
+          <div className="pixel-police-panel">
+            <p>Pixel Police Activated</p>
+          </div>
+        </div>
+      )}
+    </>
   )
 
 }
