@@ -180,6 +180,7 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
           middleY - 5
         );
       }
+      
 
       // add circle at mouse position
       if (!startPoint) {

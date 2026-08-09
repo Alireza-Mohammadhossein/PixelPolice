@@ -13,13 +13,25 @@ export default function PixelPolice() {
     y: 0 
   });
   const [startPoint, setStartPoint] = useState<Point | null>(null);
-  const [endPoint, setEndPoint] = useState<Point | null>(null);
   const [measurements, setMeasurements] = useState<PixelPoliceMeasurement[]>([]);
 
 
+  // reset measurements
+  const resetMeasurements = () => {
+    setMeasurements([]);
+    setStartPoint(null);
+    setMousePosition({ x: 0, y: 0 });
+  };
+
+  
   // toggle pixel police on and off
   const togglePixelPolice = () => {
-    setIsPixelPoliceEnabled(!isPixelPoliceEnabled);
+   
+    if (isPixelPoliceEnabled) {
+      resetMeasurements();
+    }
+
+    setIsPixelPoliceEnabled((prev) => !prev);
   }
 
 
@@ -94,7 +106,7 @@ export default function PixelPolice() {
           />
 
           <div className="pixel-police-panel">
-            <h4>Measurements</h4>
+            
             {/* <p>Mouse Position: <br />
               X: {Math.round(mousePosition.x)} <br />
               Y: {Math.round(mousePosition.y)}
@@ -103,9 +115,15 @@ export default function PixelPolice() {
               Measurements: {measurements.length}
             </p> */}
 
-            {measurements.length === 0 && (
+            {measurements.length === 0 && (!startPoint) && (
               <p>No measurements yet.</p>
             )}
+
+            
+            {measurements.length > 0 && (
+              <h4>Measurements</h4>
+            )}
+
 
             {measurements.map((measurement, index) => (
               <div
@@ -124,6 +142,8 @@ export default function PixelPolice() {
                 Selecting second point...
               </p>
             )}
+
+            
           </div>
         </div>
       )}
