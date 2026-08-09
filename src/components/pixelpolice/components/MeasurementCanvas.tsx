@@ -34,7 +34,8 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
       ctx.fillStyle = "#ffffff";
       ctx.setLineDash([6, 6]);
 
-       // Draw completed measurements
+      
+      // Draw completed measurements
       measurements.forEach((measurement) => {
         ctx.beginPath();
         ctx.moveTo(measurement.start.x, measurement.start.y);
@@ -42,6 +43,14 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
         ctx.stroke();
       });
 
+
+      // Draw preview line
+      if (startPoint) {
+        ctx.beginPath();
+        ctx.moveTo(startPoint.x, startPoint.y);
+        ctx.lineTo(mousePosition.x, mousePosition.y);
+        ctx.stroke();
+      }
 
       animationFrameId = requestAnimationFrame(draw);
 
