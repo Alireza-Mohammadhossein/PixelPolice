@@ -45,6 +45,7 @@ export default function PixelPolice() {
   },[isPixelPoliceEnabled]);
 
 
+  // handle mouse click to set start and end points for measurement
   const handleMouseClick = () => {
     if (!startPoint) {
       setStartPoint(mousePosition);
@@ -67,11 +68,11 @@ export default function PixelPolice() {
 
     setMeasurements([...measurements, PixelPoliceMeasurement]);
 
-    console.log(measurements);
-
     setStartPoint(null);
   }
   
+
+
   return (
     <>
       <button

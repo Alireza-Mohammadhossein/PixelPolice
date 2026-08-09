@@ -24,7 +24,34 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
 
     window.addEventListener("resize", resizeCanvas);
 
+    let animationFrameId: number;
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#ffffff";
+      ctx.fillStyle = "#ffffff";
+      ctx.setLineDash([6, 6]);
+
+       // Draw completed measurements
+      measurements.forEach((measurement) => {
+        ctx.beginPath();
+        ctx.moveTo(measurement.start.x, measurement.start.y);
+        ctx.lineTo(measurement.end.x, measurement.end.y);
+        ctx.stroke();
+      });
+
+
+      animationFrameId = requestAnimationFrame(draw);
+
+    }
+
+
+    draw();
+
     return () => {
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", resizeCanvas);
     }
 
