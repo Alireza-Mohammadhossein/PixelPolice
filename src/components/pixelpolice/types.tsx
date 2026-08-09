@@ -5,7 +5,7 @@ export interface Point {
 
 export interface PixelPoliceMeasurement {
   id: number;
-  start: number;
-  end: number;
+  start: Point;
+  end: Point;
   distance: number;
 }
