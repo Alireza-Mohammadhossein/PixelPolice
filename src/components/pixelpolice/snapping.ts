@@ -1,6 +1,6 @@
 import { Point } from "./types";
 
-type SnappableCorner = {
+export type SnappableCorner = {
   point: Point,
   distance: number,
   element: Element
@@ -47,6 +47,6 @@ export function getNearbyCorners(mousePosition: Point): SnappableCorner[] {
     }
   })
 
-  
+
   return nearbyCorners;
 }

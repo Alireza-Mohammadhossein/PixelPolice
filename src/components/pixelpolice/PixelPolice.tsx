@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import './PixelPolice.css';
 import { Point, PixelPoliceMeasurement } from './types';
 import MeasurementsCanvas from "./components/MeasurementCanvas";
-import { getNearbyCorners } from "./snapping";
+import { SnappableCorner ,getNearbyCorners } from "./snapping";
+
 
 
 
@@ -16,7 +17,7 @@ export default function PixelPolice() {
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [measurements, setMeasurements] = useState<PixelPoliceMeasurement[]>([]);
 
-  const [nearbyCorners, setNearbyCorners] = useState([]);
+  const [nearbyCorners, setNearbyCorners] = useState<SnappableCorner[]>([]);
 
 
   // reset measurements
@@ -45,10 +46,17 @@ export default function PixelPolice() {
     }
 
     const handleMouseMove = (event: MouseEvent) => {
-      setMousePosition({ 
-        x: event.clientX, 
-        y: event.clientY 
-      });
+      const position = {
+        x: event.clientX,
+        y: event.clientY
+      };
+
+      setMousePosition(position);
+
+      const corners = getNearbyCorners(position);
+
+      console.log(corners)
+      setNearbyCorners(corners);
     };
 
     window.addEventListener("mousemove", handleMouseMove);
