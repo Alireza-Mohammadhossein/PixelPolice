@@ -5,7 +5,8 @@ export default function MeasurementsCanvas({
   measurements, 
   startPoint, 
   mousePosition,
-  nearbyCorners 
+  nearbyCorners,
+  selectionPosition
 }: MeasurementsCanvasProps) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -45,7 +46,7 @@ export default function MeasurementsCanvas({
         const { x, y } = corner.point;
 
         ctx.setLineDash([]);
-        ctx.strokeStyle = "#0a84ff";
+        ctx.strokeStyle = "#fff";
         ctx.lineWidth = 2;
 
         const size = 10;
@@ -92,6 +93,10 @@ export default function MeasurementsCanvas({
 
       // draw completed measurements
       measurements.forEach((measurement) => {
+        ctx.setLineDash([6, 6]);
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+
         ctx.beginPath();
         ctx.moveTo(measurement.start.x, measurement.start.y);
         ctx.lineTo(measurement.end.x, measurement.end.y);
@@ -164,9 +169,13 @@ export default function MeasurementsCanvas({
 
       // draw preview line
       if (startPoint) {
+        ctx.setLineDash([6, 6]);
+        ctx.strokeStyle = "#ffffff";
+        ctx.lineWidth = 2;
+
         ctx.beginPath();
         ctx.moveTo(startPoint.x, startPoint.y);
-        ctx.lineTo(mousePosition.x, mousePosition.y);
+        ctx.lineTo(selectionPosition.x, selectionPosition.y);
         ctx.stroke();
 
         // add circle at start point
@@ -187,8 +196,8 @@ export default function MeasurementsCanvas({
         ctx.fillStyle = "#0a84ff";
         ctx.beginPath();
         ctx.arc(
-          mousePosition.x,
-          mousePosition.y,
+          selectionPosition.x,
+          selectionPosition.y,
           5,
           0,
           2 * Math.PI
@@ -201,13 +210,13 @@ export default function MeasurementsCanvas({
         // calculate the middle of the preview line
         const previewDistance = Math.round(
           Math.hypot(
-            mousePosition.x - startPoint.x,
-            mousePosition.y - startPoint.y
+            selectionPosition.x - startPoint.x,
+            selectionPosition.y - startPoint.y
           )
         );
 
-        const middleX = (startPoint.x + mousePosition.x) / 2;
-        const middleY = (startPoint.y + mousePosition.y) / 2;
+        const middleX = (startPoint.x + selectionPosition.x) / 2;
+        const middleY = (startPoint.y + selectionPosition.y) / 2;
 
 
         // draw label background
@@ -243,8 +252,8 @@ export default function MeasurementsCanvas({
         ctx.fillStyle = "#ffe5b4";
         ctx.beginPath();
         ctx.arc(
-          mousePosition.x,
-          mousePosition.y,  
+          selectionPosition.x,
+          selectionPosition.y,  
         5,
           0,
           2 * Math.PI
@@ -267,7 +276,7 @@ export default function MeasurementsCanvas({
       window.removeEventListener("resize", resizeCanvas);
     }
 
-  }, [measurements, startPoint, mousePosition, nearbyCorners])
+  }, [measurements, startPoint, mousePosition, nearbyCorners, selectionPosition])
 
 
   return (

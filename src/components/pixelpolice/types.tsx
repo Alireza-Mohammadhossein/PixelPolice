@@ -18,4 +18,5 @@ export interface MeasurementsCanvasProps {
   startPoint: Point | null;
   mousePosition: Point;
   nearbyCorners: SnappableCorner[];
+  selectionPosition: Point;
 }

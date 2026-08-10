@@ -17,6 +17,7 @@ export type SnappableCorner = {
 }
 
 
+// getting nearby corners
 export function getNearbyCorners(mousePosition: Point): SnappableCorner[] {
   const elements = document.querySelectorAll('*');
 
@@ -74,3 +75,28 @@ export function getNearbyCorners(mousePosition: Point): SnappableCorner[] {
 
   return nearbyCorners;
 }
+
+
+// choosing closet corner less than 20px
+export function getSnappableCorner(nearbyCorners: SnappableCorner[]): Point | null{
+  if (nearbyCorners.length === 0) {
+    return null;
+  } 
+
+
+const closestCorner = nearbyCorners.reduce((closest, corner) => {
+
+  if (corner.distance < closest.distance) {
+    return corner;
+  }
+
+  return closest;
+  });
+
+  if (closestCorner.distance <= 25) {
+    return closestCorner.point;
+  }
+
+  return null;
+
+} 

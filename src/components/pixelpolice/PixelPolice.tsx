@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import './PixelPolice.css';
 import { Point, PixelPoliceMeasurement } from './types';
 import MeasurementsCanvas from "./components/MeasurementCanvas";
-import { SnappableCorner ,getNearbyCorners } from "./snapping";
+import { getNearbyCorners, SnappableCorner, getSnappableCorner } from "./snapping";
 
 
 
@@ -18,6 +18,11 @@ export default function PixelPolice() {
   const [measurements, setMeasurements] = useState<PixelPoliceMeasurement[]>([]);
 
   const [nearbyCorners, setNearbyCorners] = useState<SnappableCorner[]>([]);
+
+  const [selectionPosition, setSelectionPosition] = useState<Point>({
+    x: 0,
+    y: 0
+  });
 
 
   // reset measurements
@@ -55,8 +60,15 @@ export default function PixelPolice() {
 
       const corners = getNearbyCorners(position);
 
-      // console.log(corners)
       setNearbyCorners(corners);
+
+      const snapPoint = getSnappableCorner(corners);
+
+      if (snapPoint) {
+        setSelectionPosition(snapPoint);
+      } else {
+        setSelectionPosition(position);
+      }
     };
 
     window.addEventListener("mousemove", handleMouseMove);
@@ -71,28 +83,28 @@ export default function PixelPolice() {
   // handle mouse click to set start and end points for measurement
   const handleMouseClick = () => {
     if (!startPoint) {
-      setStartPoint(mousePosition);
+      setStartPoint(selectionPosition);
       return;
     }
 
     const distance = Math.round(
       Math.hypot(
-        mousePosition.x - startPoint.x, 
-        mousePosition.y - startPoint.y
+        selectionPosition.x - startPoint.x,
+        selectionPosition.y - startPoint.y
       )
-    )
+    );
 
     const PixelPoliceMeasurement: PixelPoliceMeasurement = {
       id: Date.now(),
       start: startPoint,
-      end: mousePosition,
+      end: selectionPosition,
       distance: distance
-    }
+    };
 
     setMeasurements([...measurements, PixelPoliceMeasurement]);
 
     setStartPoint(null);
-  }
+  };
   
 
 
@@ -115,6 +127,7 @@ export default function PixelPolice() {
             startPoint={startPoint}
             mousePosition={mousePosition}
             nearbyCorners={nearbyCorners}
+            selectionPosition={selectionPosition}
           />
 
           <div className="pixel-police-panel">
