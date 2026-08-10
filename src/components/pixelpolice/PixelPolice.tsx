@@ -10,10 +10,10 @@ import { getNearbyCorners, SnappableCorner, getSnappableCorner } from "./snappin
 export default function PixelPolice() {
   
   const [isPixelPoliceEnabled, setIsPixelPoliceEnabled] = useState(false);
-  const [mousePosition, setMousePosition] = useState<Point>({ 
-    x: 0, 
-    y: 0 
-  });
+  // const [mousePosition, setMousePosition] = useState<Point>({ 
+  //   x: 0, 
+  //   y: 0 
+  // });
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [measurements, setMeasurements] = useState<PixelPoliceMeasurement[]>([]);
 
@@ -29,7 +29,7 @@ export default function PixelPolice() {
   const resetMeasurements = () => {
     setMeasurements([]);
     setStartPoint(null);
-    setMousePosition({ x: 0, y: 0 });
+    // setMousePosition({ x: 0, y: 0 });
   };
 
   
@@ -56,7 +56,7 @@ export default function PixelPolice() {
         y: event.clientY
       };
 
-      setMousePosition(position);
+      // setMousePosition(position);
 
       const corners = getNearbyCorners(position);
 
@@ -94,24 +94,62 @@ export default function PixelPolice() {
       )
     );
 
-    const PixelPoliceMeasurement: PixelPoliceMeasurement = {
+    const measurement: PixelPoliceMeasurement = {
       id: Date.now(),
       start: startPoint,
       end: selectionPosition,
       distance: distance
     };
 
-    setMeasurements([...measurements, PixelPoliceMeasurement]);
+    setMeasurements((prev) => [
+      ...prev,
+      measurement
+    ]);
 
     setStartPoint(null);
   };
   
+
+  useEffect(() => {
+    if (!isPixelPoliceEnabled) {
+      return;
+    }
+    
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target;
+
+      if (!(target instanceof Element)) {
+        return;
+      }
+
+      if (target.closest(".pixel-police-overlay")) {
+        event.stopPropagation();
+      }
+    };
+
+    document.addEventListener(
+      "pointerdown",
+      handlePointerDown,
+      true
+    );
+
+    return () => {
+      document.removeEventListener(
+        "pointerdown",
+        handlePointerDown,
+        true
+      );
+    };
+  }, [isPixelPoliceEnabled]);
+  
+
 
 
   return (
     <>
       <button
         className={`pixel-police-button ${isPixelPoliceEnabled ? "enabled" : ""}`}
+        onPointerDown={(event) => event.stopPropagation()}
         onClick={togglePixelPolice}
         >
         {isPixelPoliceEnabled ? "🚨 Pixel Police 🚨" : "🚨"}
@@ -125,7 +163,7 @@ export default function PixelPolice() {
           <MeasurementsCanvas
             measurements={measurements}
             startPoint={startPoint}
-            mousePosition={mousePosition}
+            // mousePosition={mousePosition}
             nearbyCorners={nearbyCorners}
             selectionPosition={selectionPosition}
           />
