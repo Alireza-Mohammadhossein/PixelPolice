@@ -17,6 +17,7 @@ export type SnappableCorner = {
 }
 
 
+// check if the corner is hide or not
 function isCornerVisible(
   element: Element,
   point: Point,
