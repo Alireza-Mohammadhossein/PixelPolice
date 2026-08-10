@@ -1,7 +1,12 @@
 import { useEffect, useRef } from "react";
 import { Point,PixelPoliceMeasurement, MeasurementsCanvasProps } from "../types";
 
-export default function MeasurementsCanvas({ measurements, startPoint, mousePosition }: MeasurementsCanvasProps) {
+export default function MeasurementsCanvas({ 
+  measurements, 
+  startPoint, 
+  mousePosition,
+  nearbyCorners 
+}: MeasurementsCanvasProps) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -34,7 +39,57 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
       ctx.fillStyle = "#ffffff";
       ctx.setLineDash([6, 6]);
 
+
+      // show closest corners
+      nearbyCorners.forEach((corner) => {
+        const { x, y } = corner.point;
+
+        ctx.setLineDash([]);
+        ctx.strokeStyle = "#0a84ff";
+        ctx.lineWidth = 2;
+
+        const size = 10;
+
+        ctx.beginPath();
+
+        switch (corner.position) {
+          case "top-left":
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + size, y);
+
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + size);
+            break;
+
+          case "top-right":
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - size, y);
+
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + size);
+            break;
+
+          case "bottom-left":
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + size, y);
+
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y - size);
+            break;
+
+          case "bottom-right":
+            ctx.moveTo(x, y);
+            ctx.lineTo(x - size, y);
+
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y - size);
+            break;
+        }
+
+        ctx.stroke();
+      });
       
+
       // draw completed measurements
       measurements.forEach((measurement) => {
         ctx.beginPath();
@@ -198,6 +253,8 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
       }
 
 
+
+
       animationFrameId = requestAnimationFrame(draw);
     }
 
@@ -210,7 +267,7 @@ export default function MeasurementsCanvas({ measurements, startPoint, mousePosi
       window.removeEventListener("resize", resizeCanvas);
     }
 
-  }, [measurements, startPoint, mousePosition])
+  }, [measurements, startPoint, mousePosition, nearbyCorners])
 
 
   return (

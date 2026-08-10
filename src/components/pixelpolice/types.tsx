@@ -1,3 +1,5 @@
+import { SnappableCorner } from "./snapping";
+
 export interface Point {
   x: number;
   y: number;
@@ -15,4 +17,5 @@ export interface MeasurementsCanvasProps {
   measurements: PixelPoliceMeasurement[];
   startPoint: Point | null;
   mousePosition: Point;
+  nearbyCorners: SnappableCorner[];
 }

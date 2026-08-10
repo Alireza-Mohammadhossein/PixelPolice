@@ -39,7 +39,7 @@ export default function PixelPolice() {
   }
 
 
-  // getting mouse position when pixel police is enabled
+  // getting mouse position and nearby corners when pixel police is enabled
   useEffect(() => {
     if(!isPixelPoliceEnabled) {
       return;
@@ -55,7 +55,7 @@ export default function PixelPolice() {
 
       const corners = getNearbyCorners(position);
 
-      console.log(corners)
+      // console.log(corners)
       setNearbyCorners(corners);
     };
 
@@ -114,6 +114,7 @@ export default function PixelPolice() {
             measurements={measurements}
             startPoint={startPoint}
             mousePosition={mousePosition}
+            nearbyCorners={nearbyCorners}
           />
 
           <div className="pixel-police-panel">

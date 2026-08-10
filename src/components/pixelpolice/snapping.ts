@@ -1,10 +1,21 @@
 import { Point } from "./types";
 
+
+export type CornerPosition =
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
+
+
+
 export type SnappableCorner = {
   point: Point,
   distance: number,
-  element: Element
+  element: Element,
+  position: CornerPosition
 }
+
 
 export function getNearbyCorners(mousePosition: Point): SnappableCorner[] {
   const elements = document.querySelectorAll('*');
@@ -16,17 +27,29 @@ export function getNearbyCorners(mousePosition: Point): SnappableCorner[] {
   elements.forEach((element) => {
     const rect = element.getBoundingClientRect();
 
-    const elementCorners: Point[] = [
-      {x: rect.left, y: rect.top},
-      {x: rect.right, y: rect.top},
-      {x: rect.left, y: rect.bottom},
-      {x: rect.right, y: rect.bottom},
-    ]
+    const elementCorners = [
+      {
+        point: { x: rect.left, y: rect.top },
+        position: "top-left" as CornerPosition,
+      },
+      {
+        point: { x: rect.right, y: rect.top },
+        position: "top-right" as CornerPosition,
+      },
+      {
+        point: { x: rect.left, y: rect.bottom },
+        position: "bottom-left" as CornerPosition,
+      },
+      {
+        point: { x: rect.right, y: rect.bottom },
+        position: "bottom-right" as CornerPosition,
+      },
+    ];
 
     const distances = elementCorners.map((corner) => {
       return Math.hypot(
-        corner.x - mousePosition.x,
-        corner.y - mousePosition.y
+        corner.point.x - mousePosition.x,
+        corner.point.y - mousePosition.y
       )
     })
 
@@ -40,9 +63,10 @@ export function getNearbyCorners(mousePosition: Point): SnappableCorner[] {
     // getting distance less than 50px
     if (closestDistance <= 50) {
       nearbyCorners.push({
-        point: closestCorner,
+        point: closestCorner.point,
         distance: closestDistance,
         element,
+        position: closestCorner.position,
       });
     }
   })
