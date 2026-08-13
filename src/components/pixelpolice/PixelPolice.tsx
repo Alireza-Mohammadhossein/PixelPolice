@@ -10,7 +10,10 @@ import { getNearbyCorners, SnappableCorner, getSnappableCorner } from "./snappin
 export default function PixelPolice() {
   
   const [isPixelPoliceEnabled, setIsPixelPoliceEnabled] = useState(false);
-
+  const [mousePosition, setMousePosition] = useState<Point>({ 
+    x: 0, 
+    y: 0 
+  });
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [measurements, setMeasurements] = useState<PixelPoliceMeasurement[]>([]);
 
@@ -26,6 +29,7 @@ export default function PixelPolice() {
   const resetMeasurements = () => {
     setMeasurements([]);
     setStartPoint(null);
+    setMousePosition({ x: 0, y: 0 });
   };
 
   
@@ -52,6 +56,7 @@ export default function PixelPolice() {
         y: event.clientY
       };
 
+      setMousePosition(position);
 
       const corners = getNearbyCorners(position);
 
@@ -89,27 +94,26 @@ export default function PixelPolice() {
       )
     );
 
-    const measurement: PixelPoliceMeasurement = {
+    const PixelPoliceMeasurement: PixelPoliceMeasurement = {
       id: Date.now(),
       start: startPoint,
       end: selectionPosition,
       distance: distance
     };
 
-    setMeasurements((prev) => [
-      ...prev,
-      measurement
-    ]);
+    setMeasurements([...measurements, PixelPoliceMeasurement]);
 
     setStartPoint(null);
   };
   
 
+
+  // prevent to close the panel when clicking outside of the panel
   useEffect(() => {
     if (!isPixelPoliceEnabled) {
       return;
     }
-    
+
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target;
 
@@ -136,7 +140,7 @@ export default function PixelPolice() {
       );
     };
   }, [isPixelPoliceEnabled]);
-  
+
 
 
 
@@ -145,6 +149,7 @@ export default function PixelPolice() {
       <button
         className={`pixel-police-button ${isPixelPoliceEnabled ? "enabled" : ""}`}
         onPointerDown={(event) => event.stopPropagation()}
+
         onClick={togglePixelPolice}
         >
         {isPixelPoliceEnabled ? "🚨 Pixel Police 🚨" : "🚨"}
@@ -158,12 +163,20 @@ export default function PixelPolice() {
           <MeasurementsCanvas
             measurements={measurements}
             startPoint={startPoint}
+            mousePosition={mousePosition}
             nearbyCorners={nearbyCorners}
             selectionPosition={selectionPosition}
           />
 
           <div className="pixel-police-panel">
             
+            {/* <p>Mouse Position: <br />
+              X: {Math.round(mousePosition.x)} <br />
+              Y: {Math.round(mousePosition.y)}
+            </p>
+            <p>
+              Measurements: {measurements.length}
+            </p> */}
 
             {measurements.length === 0 && (!startPoint) && (
               <p>No measurements yet.</p>

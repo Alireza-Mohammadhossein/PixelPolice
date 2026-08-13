@@ -16,6 +16,7 @@ export interface PixelPoliceMeasurement {
 export interface MeasurementsCanvasProps {
   measurements: PixelPoliceMeasurement[];
   startPoint: Point | null;
-  selectionPosition: Point;
+  mousePosition: Point;
   nearbyCorners: SnappableCorner[];
+  selectionPosition: Point;
 }

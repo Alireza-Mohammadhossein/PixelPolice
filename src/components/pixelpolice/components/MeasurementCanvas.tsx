@@ -1,11 +1,12 @@
 import { useEffect, useRef } from "react";
 import { MeasurementsCanvasProps } from "../types";
 
-export default function MeasurementsCanvas({
-  measurements,
-  startPoint,
-  selectionPosition,
-  nearbyCorners
+export default function MeasurementsCanvas({ 
+  measurements, 
+  startPoint, 
+  mousePosition,
+  nearbyCorners,
+  selectionPosition
 }: MeasurementsCanvasProps) {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -275,12 +276,7 @@ export default function MeasurementsCanvas({
       window.removeEventListener("resize", resizeCanvas);
     }
 
-  }, [
-      measurements, 
-      startPoint, 
-      nearbyCorners, 
-      selectionPosition
-    ])
+  }, [measurements, startPoint, mousePosition, nearbyCorners, selectionPosition])
 
 
   return (
