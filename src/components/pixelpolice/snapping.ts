@@ -29,6 +29,8 @@ function isCornerBehindPanel(point: Point): boolean {
   }
 
   const rect = panel.getBoundingClientRect();
+  
+  console.log(rect)
 
   return (
     point.x >= rect.left &&
@@ -42,8 +44,8 @@ function isCornerBehindPanel(point: Point): boolean {
 
 
 // getting nearby corners
-export function getNearbyCorners(mousePosition: Point): SnappableCorner[] {
-  const elements = document.body.querySelectorAll('#root *');
+export function getNearbyCorners(mousePosition: Point, elements:Element[]): SnappableCorner[] {
+  // const elements = document.body.querySelectorAll('#root *');
 
   const nearbyCorners: SnappableCorner[] = [];
 
@@ -107,25 +109,46 @@ export function getNearbyCorners(mousePosition: Point): SnappableCorner[] {
 
 
 // choosing closet corner less than 20px
-export function getSnappableCorner(nearbyCorners: SnappableCorner[]): Point | null{
+
+// export function getSnappableCorner(nearbyCorners: SnappableCorner[]): Point | null{
+//   if (nearbyCorners.length === 0) {
+//     return null;
+//   } 
+
+
+//   const closestCorner = nearbyCorners.reduce((closest, corner) => {
+
+//     if (corner.distance < closest.distance) {
+//       return corner;
+//     }
+
+//     return closest;
+
+//   });
+
+
+//   if (closestCorner.distance <= 25) {
+//     return closestCorner.point;
+//   }
+
+//   return null;
+
+// } 
+
+
+
+export function getSnappableCorner(nearbyCorners: SnappableCorner[]): Point | null {
   if (nearbyCorners.length === 0) {
     return null;
-  } 
-
-
-const closestCorner = nearbyCorners.reduce((closest, corner) => {
-
-  if (corner.distance < closest.distance) {
-    return corner;
   }
 
-  return closest;
-  });
+  let closestCorner = nearbyCorners[0];
 
-  if (closestCorner.distance <= 25) {
-    return closestCorner.point;
+  for (const corner of nearbyCorners) {
+    if (corner.distance < closestCorner.distance) {
+      closestCorner = corner;
+    }
   }
 
-  return null;
-
-} 
+  return closestCorner.distance <= 25 ? closestCorner.point : null;
+}

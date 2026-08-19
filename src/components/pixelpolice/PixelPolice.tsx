@@ -12,7 +12,7 @@ export default function PixelPolice() {
   const [isPixelPoliceEnabled, setIsPixelPoliceEnabled] = useState(false);
   const [mousePosition, setMousePosition] = useState<Point>({ 
     x: 0, 
-    y: 0 
+    y: 0
   });
   const [startPoint, setStartPoint] = useState<Point | null>(null);
   const [measurements, setMeasurements] = useState<PixelPoliceMeasurement[]>([]);
@@ -47,8 +47,16 @@ export default function PixelPolice() {
   // getting mouse position and nearby corners when pixel police is enabled
   useEffect(() => {
     if(!isPixelPoliceEnabled) {
+      document.body.style.overflow = '';
       return;
     }
+
+    document.body.style.overflow = 'hidden';
+
+    const elements = document.body.querySelectorAll('*');
+
+    console.log(elements)
+
 
     const handleMouseMove = (event: MouseEvent) => {
       const position = {
@@ -58,7 +66,7 @@ export default function PixelPolice() {
 
       setMousePosition(position);
 
-      const corners = getNearbyCorners(position);
+      const corners = getNearbyCorners(position, Array.from(elements));
 
       setNearbyCorners(corners);
 
@@ -148,7 +156,10 @@ export default function PixelPolice() {
     <>
       <button
         className={`pixel-police-button ${isPixelPoliceEnabled ? "enabled" : ""}`}
-        onPointerDown={(event) => event.stopPropagation()}
+        onPointerDown={(event) => {
+          event.stopPropagation()
+          event.preventDefault()
+        }}
 
         onClick={togglePixelPolice}
         >
